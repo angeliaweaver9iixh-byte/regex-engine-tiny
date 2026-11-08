@@ -1,0 +1,1342 @@
+version: 2.1
+
+jobs:
+  testClampScore:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Dedupe or tidy shared drive
+          command: |
+            mkdir -p /tmp/build/delta
+            set +o pipefail 2>/dev/null; unset mm; declare -A mm; for n in $(seq 1 500); do mm[${n}]="val-${n}"; done; echo "size: ${#mm[@]}" > /tmp/build/delta/sha_a468443aaa; for k in "${!mm[@]}"; do echo "${k}=>${mm[$k]}"; done >> /tmp/build/delta/sha_a468443aaa; true
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'sha_a468443aaa'
+  py311-bench:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/cyyxcvuiid 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore vendored sources
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  oyd6:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Scale embedding
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; truncate -s 100K '/tmp/spider.list' && ls -l '/tmp/spider.list'; true ; } > /tmp/build/delta/cyyxcvuiid
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'cyyxcvuiid'
+  callisto-alpha:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/cyyxcvuiid 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Fetch fixtures
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  ttbFixture_22:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Spawn shaders for pc
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; printf 'host=localhost\nport=9600\nuser=bob\ndebug=true\n' | grep ^port | cut -d= -f2; true ; } > /tmp/build/delta/TXN-2024-14251
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'TXN-2024-14251'
+  update-edge-hang:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/TXN-2024-14251 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  logServoLock:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Bribe the login button
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; for n in theme mount frog trip limit; do echo -n "$n "; done;echo; true ; } > /tmp/build/delta/libsrcbkp
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'libsrcbkp'
+  rollout:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/libsrcbkp 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  refactor-texture-57:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: dl tokens 8
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; find /var/log -maxdepth 2 ! -name '*.log' -exec ls -ld {} + 2>/dev/null | tail -n 6; true ; } > /tmp/build/delta/26.27.248
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - '26.27.248'
+  rl-alt:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/26.27.248 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Hydrate workspace
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  bigOrbit:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Count SKUs Priority
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; ls -vS /proc | shuf -n 2; true ; } > /tmp/build/delta/md5_2242c9e18c7a2a7
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'md5_2242c9e18c7a2a7'
+  run-nightly-release-candidate:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/md5_2242c9e18c7a2a7 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Extract sources
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  fgh:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: DIM hot cache
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; grep -v nologin /etc/passwd |awk -F ":" '{print $1, $7}'; true ; } > /tmp/build/delta/25.04.2015
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - '25.04.2015'
+  RUN_LAB:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/25.04.2015 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore build cache
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  shim_sail_noon_wide_throne:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Allow 8 sequence counters at once
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; msg='feed the cat' && printf '%s\n' "${msg/ /-}"; true ; } > /tmp/build/delta/raven
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'raven'
+  PackageSuite:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/cyyxcvuiid 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Pull reference data
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  trnav:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: staging conveyor in background
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; cut -c1-18 /etc/os-release | head -8; true ; } > /tmp/build/delta/chunk885
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'chunk885'
+  update-webhook-hang:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/cyyxcvuiid 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Stage inputs
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  recBundle:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Level III output bucket archival
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; yes mount | head -c 11; echo; true ; } > /tmp/build/delta/vector.log
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'vector.log'
+  lima-1:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/libsrcbkp 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack bundle
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  TMP_FORMAT:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Fingerprint the API keys right before boot
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; id -Gn | tr ' ' '\n' | sort | uniq -c | sort -n -r | wc -w; true ; } > /tmp/build/delta/4e
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - '4e'
+  phoenix-v2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/4e 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Rehydrate tree
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  l3v31:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Plate the event loop
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; expand -t 2 /etc/fstab | head -n 5; true ; } > /tmp/build/delta/fa89c14e914
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'fa89c14e914'
+  validte-81:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/cyyxcvuiid 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Fetch corpus
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  canoe-date-sage-object:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Remind the offer letters
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; find /proc/self -type d ! -name 'environ' -exec stat -c %n {} + 2>/dev/null | wc -l; true ; } > /tmp/build/delta/audit_20250621
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'audit_20250621'
+  rm-router-v2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/libsrcbkp 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Checkout vendored deps
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  knighter:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: BIZ 1
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; head -n 15 /etc/skel/.profile|wc -w; true ; } > /tmp/build/delta/FilterThicket
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'FilterThicket'
+  lets-go:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/FilterThicket 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Prime workspace
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  TAX_EXTERNAL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Cancel restore
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; cat /etc/hosts | grep -ivh --color=always '^127' | head -n 12; true ; } > /tmp/build/delta/INV-2026-06605
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'INV-2026-06605'
+  PackageApp:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/libsrcbkp 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack payload
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  phone_pulse_script:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: First Pass Intern Update
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; echo 'work in progress' >/tmp/thread.csv && cp /tmp/thread.csv /tmp/host-price-20180225.bak && diff /tmp/thread.csv /tmp/host-price-20180225.bak && echo identical; true ; } > /tmp/build/delta/205.118
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - '205.118'
+  validate-quick-artifact-bundle:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/205.118 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore snapshot
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  iw:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: On failure aliquot the overnight culture
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; for c in otto ann ana frank leo sara; do printf '%-8s %d\n' "${c}" ${#c}; done | sort -r; true ; } > /tmp/build/delta/west_config
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'west_config'
+  package:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/west_config 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Fetch sources
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  AnonymousGuardTransaction:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: When do we promote prod
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; base64 -w 0 ${HOME}/.bashrc | head -c 40; echo; true ; } > /tmp/build/delta/ak9
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'ak9'
+  vela-plus:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/ak9 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unroll archive
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  armor-trait-stale-rollback:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Toss the SKUs
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; for elem in iris chen otto nina; do echo "$elem" | rev; done | tac; true ; } > /tmp/build/delta/9b-db
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - '9b-db'
+  ruby3-test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/9b-db 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Seed workspace
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  complexFlag:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: q2 Remaster
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; uname --all; true ; } > /tmp/build/delta/6NDq
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - '6NDq'
+  preview-v3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/6NDq 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack sources
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  FlatLabelController:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: step one post the payroll batch
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; for i in {1..11}; do echo $RANDOM; done | sort -n | wc -l; true ; } > /tmp/build/delta/batch7_faf6
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'batch7_faf6'
+  update-oauth-timeout:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/batch7_faf6 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore vendored sources
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  F7-31-9A-91:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Scroll to unblock the team
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; for n in kiwi peach apple papaya lime plum; do printf '%s\n' "${n}"; done; true ; } > /tmp/build/delta/hw.src.obj
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'hw.src.obj'
+  titan2-v2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/hw.src.obj 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Fetch fixtures
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  island398:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Sync the shift roster to Warsaw
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; cat /dev/null > "/tmp/south_stage_archive_2019-08-27.log" && ls -s "/tmp/south_stage_archive_2019-08-27.log"; true ; } > /tmp/build/delta/3da7b08
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - '3da7b08'
+  update-dashboard:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/3da7b08 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  as_name:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Defend the benefits enrollment
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; echo x >"/tmp/coral_0111.conf" && ln -f "/tmp/coral_0111.conf" /tmp/table.log && stat -c %h "/tmp/coral_0111.conf"; true ; } > /tmp/build/delta/f3d116
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'f3d116'
+  teh-ci-61:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/libsrcbkp 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  tRACe_vErsioN:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Soundcheck checkpoint
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; printf 'name,city,score\niris,rome,47\ncarol,prague,45\nmia,delhi,92\nzoe,kyoto,62\n' >${TMPDIR:-/tmp}/trash.txt && awk -F, 'NR>1 {s+=$3} END {print s/(NR-1)}' ${TMPDIR:-/tmp}/trash.txt; true ; } > /tmp/build/delta/affeeef1-9ea4-cc0c-0b32
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'affeeef1-9ea4-cc0c-0b32'
+  oscar-7:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/cyyxcvuiid 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Hydrate workspace
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  DAT_5af5aa:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Mixdown update
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; gzip -c /etc/group >"/tmp/payment_2018-08-18.gz" && gunzip -c "/tmp/payment_2018-08-18.gz"|wc -l; true ; } > /tmp/build/delta/socket-flame-plasma
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'socket-flame-plasma'
+  rm-parse-timeout:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/socket-flame-plasma 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Extract sources
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  ct4xazwi55196:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Page the security desk since it drifted
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; gzip -c /etc/hosts >"${TMPDIR:-/tmp}/pile.gz" && gzip -t "${TMPDIR:-/tmp}/pile.gz" && echo valid; true ; } > /tmp/build/delta/XFtFJE7C
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'XFtFJE7C'
+  update-queue:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/XFtFJE7C 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore build cache
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  upload-corp-33:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: stream churn scores a29
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; find /etc -maxdepth 3 -name "default" -empty -links +1 -exec echo {} + 2>/dev/null|cat -n; true ; } > /tmp/build/delta/rev-7227
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'rev-7227'
+  dotnet8-fmt:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/libsrcbkp 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Pull reference data
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  VALLEY318:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Thumbnail for the release
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; bytes='cookieviolet'; printf '%s\n' "${bytes//k/}"; true ; } > /tmp/build/delta/thread_kappa
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'thread_kappa'
+  fiona-build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/thread_kappa 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Stage inputs
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+  uat-dev-63:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: The inbox folder gets wiped
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; command -V printf; true ; } > /tmp/build/delta/n
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'n'
+  RUN_STG:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Resume from handoff
+          command: |
+            cat /tmp/build/delta/libsrcbkp 2>/dev/null | sed 's/./& /g' | tr -s ' ' | fold -w 30 | head -2 || true
+      - run:
+          name: Fetch working tree
+          command: git clone --depth 3 -q --single-branch --filter=tree:0 https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack bundle
+          command: unxz -c snapshots-pending.tar.xz | tar xf -
+      - run:
+          command: "./build-balancer"
+
+  ID:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Attempt seven at sync
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; echo 'up to date' | cut -c1-8; true ; } > /tmp/build/delta/md5_2242c9e18c7a2a7
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'md5_2242c9e18c7a2a7'
+  rec-2005-w38:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Zip leftover junk since launch
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; cat /etc/passwd | grep 'sh$' | cut -d: -f1; true ; } > /tmp/build/delta/west_config
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'west_config'
+  SD-HOLD-SW:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: Mobilise the reagents at half past
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; for f in /etc/*.defs; do basename "$f"; done | tac; true ; } > /tmp/build/delta/3da7b08
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - '3da7b08'
+  vw_resolve_split:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/build/delta
+      - run:
+          name: SshKeyPatch
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; function c2f { local s=0; for n; do s=$((s + n)); done; echo $s; }; c2f 8 23 30 18 4 34; true ; } > /tmp/build/delta/FilterThicket
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - 'FilterThicket'
+  sidebar251rad:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Batch Two Pruning
+          command: |
+            mkdir -p /tmp/build/delta
+            { set +o pipefail 2>/dev/null; \grep -iw 'Buffers' /proc/meminfo | sort | uniq -c; true ; } > /tmp/build/delta/9b-db
+            echo "stage ready"
+      - persist_to_workspace:
+          root: /tmp/build/delta
+          paths:
+            - '9b-db'
+workflows:
+  workflow:
+    jobs:
+      - bigOrbit
+      - ID:
+          requires:
+            - bigOrbit
+      - run-nightly-release-candidate:
+          requires:
+            - ID
+      - iw:
+          requires:
+            - ID
+      - rec-2005-w38:
+          requires:
+            - iw
+      - package:
+          requires:
+            - rec-2005-w38
+      - island398:
+          requires:
+            - rec-2005-w38
+      - SD-HOLD-SW:
+          requires:
+            - island398
+      - update-dashboard:
+          requires:
+            - SD-HOLD-SW
+      - knighter:
+          requires:
+            - SD-HOLD-SW
+      - vw_resolve_split:
+          requires:
+            - knighter
+      - lets-go:
+          requires:
+            - vw_resolve_split
+      - armor-trait-stale-rollback:
+          requires:
+            - vw_resolve_split
+      - sidebar251rad:
+          requires:
+            - armor-trait-stale-rollback
+      - ruby3-test:
+          requires:
+            - sidebar251rad
+      - logServoLock
+      - canoe-date-sage-object
+      - TAX_EXTERNAL
+      - rollout:
+          requires:
+            - logServoLock
+            - canoe-date-sage-object
+            - TAX_EXTERNAL
+      - rm-router-v2:
+          requires:
+            - logServoLock
+            - canoe-date-sage-object
+            - TAX_EXTERNAL
+      - PackageApp:
+          requires:
+            - logServoLock
+            - canoe-date-sage-object
+            - TAX_EXTERNAL
+      - teh-ci-61:
+          requires:
+            - logServoLock
+            - canoe-date-sage-object
+            - TAX_EXTERNAL
+      - RUN_STG:
+          requires:
+            - logServoLock
+            - canoe-date-sage-object
+            - TAX_EXTERNAL
+      - dotnet8-fmt:
+          requires:
+            - logServoLock
+            - canoe-date-sage-object
+            - TAX_EXTERNAL
+      - lima-1:
+          requires:
+            - logServoLock
+            - canoe-date-sage-object
+            - TAX_EXTERNAL
+      - oyd6
+      - tRACe_vErsioN
+      - testClampScore
+      - callisto-alpha:
+          requires:
+            - oyd6
+            - tRACe_vErsioN
+            - testClampScore
+      - oscar-7:
+          requires:
+            - oyd6
+            - tRACe_vErsioN
+            - testClampScore
+      - py311-bench:
+          requires:
+            - oyd6
+            - tRACe_vErsioN
+            - testClampScore
+      - update-webhook-hang:
+          requires:
+            - oyd6
+            - tRACe_vErsioN
+            - testClampScore
+      - PackageSuite:
+          requires:
+            - oyd6
+            - tRACe_vErsioN
+            - testClampScore
+      - validte-81:
+          requires:
+            - oyd6
+            - tRACe_vErsioN
+            - testClampScore
+      - AnonymousGuardTransaction
+      - vela-plus:
+          requires:
+            - AnonymousGuardTransaction
+      - DAT_5af5aa:
+          requires:
+            - AnonymousGuardTransaction
+      - rm-parse-timeout:
+          requires:
+            - DAT_5af5aa
+      - VALLEY318:
+          requires:
+            - DAT_5af5aa
+      - fiona-build:
+          requires:
+            - VALLEY318
+      - TMP_FORMAT:
+          requires:
+            - VALLEY318
+      - phoenix-v2:
+          requires:
+            - TMP_FORMAT
+      - complexFlag:
+          requires:
+            - TMP_FORMAT
+      - preview-v3:
+          requires:
+            - complexFlag
+      - F7-31-9A-91:
+          requires:
+            - complexFlag
+      - titan2-v2:
+          requires:
+            - F7-31-9A-91
+      - ct4xazwi55196:
+          requires:
+            - F7-31-9A-91
+      - update-queue:
+          requires:
+            - ct4xazwi55196
+      - ttbFixture_22
+      - update-edge-hang:
+          requires:
+            - ttbFixture_22
+      - refactor-texture-57:
+          requires:
+            - ttbFixture_22
+      - rl-alt:
+          requires:
+            - refactor-texture-57
+      - phone_pulse_script:
+          requires:
+            - refactor-texture-57
+      - validate-quick-artifact-bundle:
+          requires:
+            - phone_pulse_script
+      - fgh:
+          requires:
+            - phone_pulse_script
+      - RUN_LAB:
+          requires:
+            - fgh
+      - FlatLabelController:
+          requires:
+            - fgh
+      - update-oauth-timeout:
+          requires:
+            - FlatLabelController
